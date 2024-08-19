@@ -6,23 +6,58 @@ function rand(min,max){
 
 function esperaAi(msg,tempo){
     return new Promise((resolve,reject) => {
+        if(typeof msg !== 'string'){
+            reject(false);
+            return;
+        }
+
+
         setTimeout(() => {
-            resolve(msg);
+            resolve(msg.toUpperCase() + '- Passei na promise');
         },tempo);
     });
 }
 
+//Promise.all Promise.race Promise.resolve Promise.reject
 
-esperaAi('Frase1',rand(1,3))
-.then(resposta => {
-    console.log(resposta)
-    return esperaAi('Frase2',rand(1,3))
+const promises = [
+    esperaAi('Promise 1',3000),
+    esperaAi('Promise 2',500),
+    esperaAi('Promise 3',1000),
+    // esperaAi(1000,1000),
+    
+];
+
+
+
+// Promise.all(promises)
+// .then(function(valor){
+//     console.log(valor);
+// })
+// .catch(function(erro){
+//     console.log(erro)
+// })
+
+Promise.race(promises)
+.then(function(valor){
+    console.log(valor);
 })
-.then(resposta => {
-    console.log(resposta)
-    return esperaAi('Frase3',rand(1,3))
+.catch(function(erro){
+    console.log(erro)
 })
-.then(resposta => {
-    console.log(resposta)
+
+function baixaPagina(){
+    const emCache = true;
+
+    if(emCache){
+        return Promise.resolve('Pagina em cache');
+    } else {
+        esperaAi('Baixei a pagina',3000)
+    }
+}
+
+baixaPagina()
+.then(dadosPagina => {
+    console.log(dadosPagina)
 })
-.catch();
+.catch(e => console.loh(e))
